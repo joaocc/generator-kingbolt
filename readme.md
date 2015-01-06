@@ -1,5 +1,5 @@
-KingBolt generator
-==================
+yo kingbolt
+===========
 Yeoman generator for a new AngularJS-Application based on
 Karma, aNgularJS, Gulp, BOwer, Typescript,
 TSD and Angular-material.
