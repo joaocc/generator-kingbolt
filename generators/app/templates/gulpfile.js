@@ -8,6 +8,8 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var karma = require('karma').server;
 var browserSync = require('browser-sync');
+//var changed = require('gulp-changed');
+var newer = require('gulp-newer');
 
 var reload = browserSync.reload;
 
@@ -15,6 +17,12 @@ var tsProject = ts.createProject({
     declarationFiles: true,
     noExternalResolve: true,
 	sortOutput: true
+});
+
+var tsTests = ts.createProject({
+    declarationFiles: false,
+    noExternalResolve: false,
+    sortOutput: true
 });
 
 /**
@@ -31,7 +39,8 @@ gulp.task('tsd', function (callback) {
  * Compile sources once
  */
 gulp.task('compile', function() {
-    var tsResult = gulp.src(['src/**/*.ts','typings/**/*.ts'])
+    var tsResult = gulp.src(['src/**/*.ts', 'typings/**/*.ts'])
+                       .pipe(newer('release/js/app.min.js'))
                        .pipe(ts(tsProject));
 
 	return tsResult.js
@@ -51,9 +60,13 @@ gulp.task('compile', function() {
  */
 gulp.task('compiletests', function() {
     var tsResult = gulp.src(['test/**/*.spec.ts'])
-                       .pipe(ts({}));
+                       //.pipe(changed('release/test'))
+                       .pipe(newer('release/test/tests.js'))
+                       .pipe(ts(tsTests));
 
-	return tsResult.js
+    return tsResult.js
+                .pipe(concat('tests.js'))
+                //.pipe(newer('release/test'))
                 .pipe(gulp.dest('release/test')) //here we write the normal output
 
 });
@@ -93,7 +106,7 @@ gulp.task('watch', function() {
 
 
 // Watch Files For Changes & Reload
-gulp.task('serve', ['compileAll'], function () {
+gulp.task('serve', function () {
 	browserSync({
 	notify: false,
 	// Customize the BrowserSync console logging prefix

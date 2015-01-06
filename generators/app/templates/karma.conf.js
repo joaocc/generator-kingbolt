@@ -14,7 +14,7 @@ module.exports = function(config) {
       	'bower_components/angular-route/angular-route.js',
       	'bower_components/angular-mocks/angular-mocks.js',
 		'release/js/app.min.js',
-		'release/test/*.spec.js'
+		'release/test/tests.js'
     ],
 
 	plugins : [
