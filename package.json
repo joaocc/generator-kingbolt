@@ -1,0 +1,11 @@
+{
+	"name": "generator-kingbolt",
+	"version": "0.1.0",
+	"description": "Yeoman-generator that generates a mobile-first, offline-first SPA using Karma, AngularJS, Gulp, Bower, Typescript and Angular-Material-Design",
+	"keywords": ["yeoman-generator"],
+	"author": "Alex Stracker",
+	"dependencies": {
+		"yeoman-generator": "^0.17.3",
+		"chalk": "~0.4.0"
+	}
+}
