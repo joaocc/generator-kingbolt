@@ -11,8 +11,8 @@ Node.js, git and gulp must be installed (gulp globally).
 Install
 -------
 ```
-git clone https://github.com/strabu/Angular-KiNGBolT.git
-cd angular-kingbolt
+git clone https://github.com/strabu/generator-kingbolt.git
+cd generator-kingbolt
 npm link
 ```
 
