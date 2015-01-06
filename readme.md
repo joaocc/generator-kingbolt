@@ -8,7 +8,8 @@ Prerequisites
 -------------
 - Node.js http://nodejs.org/
 - git http://git-scm.com/
-- Gulp http://gulpjs.com/ (`npm install --global gulp`)
+- Gulp http://gulpjs.com/ 
+(`npm install --global gulp`)
 
 
 1. Install
