@@ -80,7 +80,7 @@ gulp.task('compileAll', ['compile','compiletests']);
 /**
  * Run test once and exit
  */
-gulp.task('test', function (done) {
+gulp.task('test',['compileAll'], function (done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
@@ -100,8 +100,8 @@ gulp.task('watchTest', function (done) {
 /**
  * Watch for changed typescript-files and compile automatically to js-files
  */
-gulp.task('watch', function() {
-    gulp.watch('**/*.ts', ['compile','compiletests']);
+gulp.task('watch', ['compileAll'], function() {
+    gulp.watch('**/*.ts', ['compileAll']);
 });
 
 
@@ -120,6 +120,6 @@ gulp.task('serve', function () {
 
 gulp.task('watchServe', ['watch','serve']);
 
-gulp.task('install', ['tsd','compileAll']);
+gulp.task('install', ['tsd']);
 
 gulp.task('default', ['watch','serve', 'watchTest']);

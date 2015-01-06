@@ -8,8 +8,9 @@ TSD and Angular-material.
 
 - Node.js http://nodejs.org/
 - git http://git-scm.com/
-- Gulp http://gulpjs.com/ 
-(`npm install --global gulp`)
+- yeoman http://yeoman.io/ `npm install -g yo`
+- bower http://bower.io/ `npm install -g bower`
+- Gulp http://gulpjs.com/ `npm install -g gulp`
 
 
 ##1. Install
