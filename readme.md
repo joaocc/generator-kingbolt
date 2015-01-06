@@ -6,23 +6,24 @@ TSD and Angular-material.
 
 Prerequisites
 -------------
-Node.js, git and gulp must be installed (gulp globally).
+- Node.js http://nodejs.org/
+- git http://git-scm.com/ 
+- Gulp http://gulpjs.com/ (`npm install --global gulp`)
 
-Install
+
+1. Install
 -------
 ```
-git clone https://github.com/strabu/generator-kingbolt.git
-cd generator-kingbolt
-npm link
+npm install -g generator-kingbolt
 ```
 
-Usage
+2. Usage
 -----
 ```
 yo kingbolt
 ```
 
-To download all required 3rd-party files
+3. To download all required 3rd-party files
 -------------------
 ```
 npm install
@@ -30,10 +31,16 @@ bower install
 gulp install
 ```
 
-
-To start developing
+4. To start developing
 -------------------
 ```
 gulp
 ```
 
+Install locally to contribute
+----------
+```
+git clone https://github.com/strabu/generator-kingbolt.git
+cd generator-kingbolt
+npm link
+```
