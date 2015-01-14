@@ -1,15 +1,22 @@
+/// <vs BeforeBuild='compile' />
 var gulp = require('gulp');
 var tsd = require('gulp-tsd'); //https://www.npmjs.com/package/gulp-tsd
 var ts = require('gulp-typescript'); //https://www.npmjs.com/package/gulp-typescript/
 //var tsc = require('gulp-tsc'); //Alternative approach to gulp-typescript https://www.npmjs.com/package/gulp-tsc
 var eventStream = require('event-stream');
-var concat = require('gulp-concat');
+//var concat = require('gulp-concat');
+var concat = require('gulp-concat-sourcemap');
+var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var karma = require('karma').server;
 var browserSync = require('browser-sync');
 //var changed = require('gulp-changed');
 var newer = require('gulp-newer');
+//var notify = require("gulp-notify"); opens a toast-window
+var print = require('gulp-print');
+var replace = require('gulp-replace');
+var runSequence = require('run-sequence');
 
 var reload = browserSync.reload;
 
@@ -36,19 +43,56 @@ gulp.task('tsd', function (callback) {
 });
 
 /**
- * Compile sources once
+ * Install required files (get Typescript-Typings)
  */
-gulp.task('compile', function() {
-    var tsResult = gulp.src(['src/**/*.ts', 'typings/**/*.ts'])
-                       .pipe(newer('release/js/app.min.js'))
-                       .pipe(ts(tsProject));
+gulp.task('install', ['tsd']);
 
-	return tsResult.js
-                .pipe(concat('app.js')) // You can use other plugins that also support gulp-sourcemaps
-                //.pipe(sourcemaps.write()) // Now the sourcemaps are added to the .js file
-                .pipe(gulp.dest('release/js')) //here we write the normal output
-				// This will minify and rename to foo.min.js
+/**
+ * Compile sources once, prepare SourceMaps and uglify in parallel
+ */
+gulp.task('compile', function (callback) {
+    runSequence('compileTS', ['repairSourcemaps', 'uglify']
+        , callback);
+});
+
+/**
+ * compile Typescript to Javascript
+ */
+gulp.task('compileTS', function () {
+    var tsResult = gulp.src(['src/**/*.ts', 'typings/**/*.ts'])
+                           .pipe(newer('release/js/app.min.js'))
+                           .pipe(sourcemaps.init()) //This means sourcemaps will be generated
+                           .pipe(ts(tsProject))
+
+    return tsResult.js
+                .pipe(concat('app.js')) //You can use other plugins that also support gulp-sourcemaps
+                .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '../../src/' })) //Now the sourcemaps are added to the .js file
+                .pipe(gulp.dest('release/js'))
+				//This will minify and rename to foo.min.js
 				//see: https://github.com/gulpjs/gulp/blob/master/docs/recipes/minified-and-non-minified.md
+});
+
+/**
+ * repair SourceMaps to make Typescript-Debugging in VisualStudio possible
+ */
+gulp.task('repairSourcemaps', function () {
+    var workingDir = process.cwd().replace(/\\/g,'/') + '/';
+    console.log('Our Working-Directory that will be removed from the paths in the map-file: ' + workingDir);
+    return gulp.src('release/js/app.js.map')
+                //.pipe(replace('c:/Develop/Web related/KingBolt/KingBoltDemo/',''))
+                .pipe(replace(workingDir,''))
+                .pipe(print(function (filepath) {
+                    return "repairSourcemap: " + filepath;
+                }))
+                .pipe(gulp.dest('release/js'))
+});
+
+
+/**
+ * compress app.js and genereate app.min.js
+ */
+gulp.task('uglify', function () {
+	return gulp.src('release/js/app.js')
 				.pipe(uglify())
 				.pipe(rename({ extname: '.min.js' }))
 				.pipe(gulp.dest('release/js'));
@@ -56,9 +100,9 @@ gulp.task('compile', function() {
 
 
 /**
- * Compile tests once
+ * Compile tests from Typescript to Javascript once
  */
-gulp.task('compiletests', function() {
+gulp.task('compileTests', function() {
     var tsResult = gulp.src(['test/**/*.spec.ts'])
                        //.pipe(changed('release/test'))
                        .pipe(newer('release/test/tests.js'))
@@ -75,22 +119,24 @@ gulp.task('compiletests', function() {
 /**
  * Compile sources and tests once
  */
-gulp.task('compileAll', ['compile','compiletests']);
+gulp.task('compileAll', ['compile','compileTests']);
+
 
 /**
- * Run test once and exit
+ * Run Karma-test once and exit
  */
-gulp.task('test',['compileAll'], function (done) {
+gulp.task('test', function (done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
   }, done);
 });
 
+
 /**
- * Run test once and exit
+ * Watch for changed Typescript-files and repeat Tests if files were modified.
  */
-gulp.task('watchTest', function (done) {
+gulp.task('watchTest', ['compileAll'], function (done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: false
@@ -98,14 +144,16 @@ gulp.task('watchTest', function (done) {
 });
 
 /**
- * Watch for changed typescript-files and compile automatically to js-files
+ * Watch for changed Typescript-files and compile automatically to js-files
  */
-gulp.task('watch', ['compileAll'], function() {
-    gulp.watch('**/*.ts', ['compileAll']);
+gulp.task('watch', function() {
+    gulp.watch('**/*.ts', ['compile', 'compileTests']);
 });
 
 
-// Watch Files For Changes & Reload
+/**
+ * Watch html-Files and app.js for Changes & Reload Webbrowser in case.
+ */
 gulp.task('serve', function () {
 	browserSync({
 	notify: false,
@@ -118,8 +166,12 @@ gulp.task('serve', function () {
 	gulp.watch(['./release/js/app.js'], reload);
 });
 
-gulp.task('watchServe', ['watch','serve']);
+/**
+ * Watch Source-Files (Typescript) for Changes, Recompile & Reload Webbrowser in case.
+ */
+gulp.task('watchServe', ['watch', 'serve']);
 
-gulp.task('install', ['tsd']);
-
-gulp.task('default', ['watch','serve', 'watchTest']);
+/**
+ * Watch Sourcefiles, Compile to JavaScript if Typescript-files were modified, run UnitTests automatically and update Website
+ */
+gulp.task('default', ['watch', 'serve', 'watchTest']);
