@@ -1,0 +1,20 @@
+<div data-ng-controller="app.layout.ShellController as vm" layout="row" flex>
+
+    <div data-ng-include="'app/layout/sidebar.html'" layout="row"></div>
+    <div flex layout="column">
+
+        <md-toolbar layout="row" class="md-hue-1">
+            <md-button ng-click="vm.toggleSidenav('left')" hide-gt-sm class="menuBtn" aria-label="Menu"></md-button>
+            <div class="toolbarTitle" layout="row" layout-align="start center" flex>{{title}}</div>
+
+        </md-toolbar>
+
+        <div ng-view style="overflow:auto"></div>
+        <!--
+        <div ng-view style="background-color:yellow; position:absolute; top:65px; bottom:0px; overflow:auto; width:auto"></div>
+            -->
+    </div>
+    <!--
+    <div data-ng-include="'app/layout/optionsbar.html'" layout="row"></div>
+        -->
+</div>

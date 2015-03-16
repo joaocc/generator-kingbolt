@@ -1,0 +1,19 @@
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$media('gt-sm')">
+    <div data-ng-controller="app.layout.SidebarController as vm">
+        <md-toolbar layout="row">
+<%= safeAppName %>
+        </md-toolbar>
+        <ul class="docs-menu menu-toggle-list">
+            <li>
+                <md-button ng-class="{'active' : vm.isSelected('Child')}" href="#/children">
+
+                        <span flex>Feature 1</span>
+
+                </md-button>
+            </li>
+
+        </ul>
+    </div>
+</md-sidenav>
+
+
