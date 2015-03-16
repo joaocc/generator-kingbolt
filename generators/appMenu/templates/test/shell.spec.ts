@@ -1,4 +1,4 @@
-/// <reference path="../../app/App.ts" />
+/// <reference path="../app/App.ts" />
 
 /*jslint white: true, node:true, nomen:true */
 /*global beforeEach, afterEach, describe, expect, it, spyOn, xdescribe, xit, inject */
@@ -10,13 +10,19 @@
 
 describe("controller: Shell", function() {
 	//var scope, controller;
-	var controller: layout.IShellVM;
+	//var controller: layout.IShellVM;
+	var controller;
 
-	beforeEach(module('app'));
+	beforeEach(module('app.layout'));
 
 	beforeEach(inject(function($controller, $rootScope){
 		//scope = $rootScope.$new();
-		controller = $controller('shell', {});
+		var mdSidenav;
+
+		controller = $controller('app.layout.ShellController',
+		{
+			'$mdSidenav': mdSidenav
+		});
 	}));
 
 
@@ -24,6 +30,7 @@ describe("controller: Shell", function() {
 		expect(controller).toBeTruthy();
 	});
 
+	/*
 	it('should have a property: message', function() {
 		//dump(controller.message);
 		expect(controller.message).toBeDefined();
@@ -43,4 +50,5 @@ describe("controller: Shell", function() {
 		controller.increase();
 		expect(controller.count).toBe(4);
 	});
+	*/
 });

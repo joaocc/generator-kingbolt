@@ -24,6 +24,7 @@ module.exports = generators.Base.extend({
 	copyRootTemplates: function () {
 		this.copy('gitignore.txt', '.gitignore');
 		this.copy('index.html', 'index.html');
+		this.copy('app.css', 'app.css');
 		this.copy('bower.json', 'bower.json');
 		this.copy('gulpfile.js', 'gulpfile.js');
 		this.copy('karma.conf.js', 'karma.conf.js');
@@ -32,19 +33,22 @@ module.exports = generators.Base.extend({
 		this.copy('tsd.json', 'tsd.json');
   	},
 	copySrcTemplates: function () {
-		this.copy('src/_App.ts', 'app/_App.ts');
-		this.copy('src/App.module.ts', 'app/App.module.ts');
-		this.copy('src/App.ts', 'app/App.ts');
+		this.copy('app/_App.ts', 'app/_App.ts');
+		this.copy('app/app.modules.js', 'app/app.modules.js');
+		this.copy('app/App.ts', 'app/App.ts');
   	},
 	copySrcCommonTemplates: function () {
-		this.copy('src/common/Logger.ts', 'app/common/Logger.ts');
+		this.copy('app/common/Logger.ts', 'app/common/Logger.ts');
   	},
 	copySrcLayoutTemplates: function () {
-		this.copy('src/layout/Shell.ts', 'app/layout/Shell.ts');
+		this.copy('app/layout/ShellController.ts', 'app/layout/ShellController.ts');
+		this.copy('app/layout/Shell.html', 'app/layout/Shell.html');
+	    this.copy('app/layout/SidebarController.ts', 'app/layout/SidebarController.ts');
+		this.copy('app/layout/Sidebar.html', 'app/layout/Sidebar.html');
   	},
 	copyTestTemplates: function () {
-		this.copy('test/logger.spec.ts', 'test/common/Logger.spec.ts');
-		this.copy('test/shell.spec.ts', 'test/layout/Shell.spec.ts');
+		this.copy('test/logger.spec.ts', 'test/logger.spec.ts');
+		this.copy('test/shell.spec.ts', 'test/shell.spec.ts');
   	},
 	finalMessage: function () {
 		console.log('\n\nTo install all required 3rd party-files please type:'

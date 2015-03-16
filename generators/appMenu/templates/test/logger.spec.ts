@@ -1,4 +1,4 @@
-/// <reference path="../../app/App.ts" />
+/// <reference path="../app/App.ts" />
 
 /*jslint white: true, node:true, nomen:true */
 /*global beforeEach, afterEach, describe, expect, it, spyOn, xdescribe, xit, inject */
@@ -7,24 +7,18 @@
 
 describe("service: Logger", function() {
 
-	beforeEach(module('app'));
+	beforeEach(module('app.core'));
 
-	var logger: common.Logger;
+	var logger: app.core.Logger;
 
-	beforeEach(inject(function(_logger_){
-		logger = _logger_;
+	beforeEach(inject(function(_Logger_){
+		logger = _Logger_
 	}));
-
-	/*
-	beforeEach(function() {
-
-	});
-	*/
 
 	it('should be registered', function() {
 		expect(logger).toBeTruthy();
 	});
-
+/*
 	it('should have method info()', function() {
 		expect(logger.info).toBeTruthy();
 	});
@@ -36,6 +30,8 @@ describe("service: Logger", function() {
 	it('should have method error()', function() {
 		expect(logger.error).toBeTruthy();
 	});
+
+	*/
 
 	/*
 	it('should have support for WebSQL', function() {
